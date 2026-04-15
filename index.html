@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>System Node</title>
+<style>
+    body {
+        margin: 0;
+        background: black;
+        color: #00ff9f;
+        font-family: monospace;
+        overflow: hidden;
+    }
+
+    #terminal {
+        padding: 20px;
+        height: 100vh;
+        box-sizing: border-box;
+    }
+
+    .line {
+        margin: 3px 0;
+    }
+
+    input {
+        background: black;
+        border: none;
+        color: #00ff9f;
+        font-family: monospace;
+        font-size: 16px;
+        outline: none;
+        width: 80%;
+    }
+
+    .glitch {
+        animation: glitch 0.3s infinite;
+    }
+
+    @keyframes glitch {
+        0% { text-shadow: 2px 0 red; }
+        50% { text-shadow: -2px 0 blue; }
+        100% { text-shadow: 2px 0 green; }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="terminal">
+    <div class="line">> SYSTEM NODE ACTIVE</div>
+    <div class="line">> TYPE "help" TO START</div>
+    <br>
+    <div id="output"></div>
+
+    <div class="line">
+        > <input id="cmd" autofocus autocomplete="off">
+    </div>
+</div>
+
+<script>
+const output = document.getElementById("output");
+const cmd = document.getElementById("cmd");
+
+let stage = 0;
+
+const fragments = [
+    "01010011",
+    "01010100",
+    "01000001",
+    "????",
+    "01010010"
+];
+
+function print(text) {
+    output.innerHTML += `<div class="line">${text}</div>`;
+}
+
+cmd.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        let val = cmd.value.trim().toLowerCase();
+        cmd.value = "";
+
+        print("> " + val);
+
+        // HELP
+        if (val === "help") {
+            print("Available commands: start, fragments, decode");
+        }
+
+        // START
+        else if (val === "start") {
+            print("Fragments detected.");
+            print('Type "fragments" to view them.');
+            stage = 1;
+        }
+
+        // FRAGMENTS
+        else if (val === "fragments") {
+            print("DATA STREAM:");
+            fragments.forEach((f, i) => {
+                print((i+1) + ": " + f);
+            });
+            print("Tip: one fragment is hidden.");
+        }
+
+        // DECODE
+        else if (val === "decode") {
+            print("Tip: this is binary data.");
+        }
+
+        // SECRET
+        else if (val === "assemble") {
+            print("Missing fragment detected.");
+            print("Search hidden layer on this page.");
+            document.body.classList.add("glitch");
+        }
+
+        else {
+            print("ERROR: unknown command");
+        }
+    }
+});
+</script>
+
+</body>
+</html>
